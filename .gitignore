@@ -1,2 +1,10 @@
 dataset cubicasa/
 archive.zip
+copy2colab/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+model_checkpoints/
+simple_checkpoints/
+*.ipynb_checkpoints

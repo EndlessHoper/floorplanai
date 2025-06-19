@@ -11,3 +11,81 @@ NEVER create dummy data only use the real data.
 
 You can read through the original repo (NOT MY REPO AND WE ARE MAKING OUR OWN MODEL BUT CAN BE USEFUL FOR REFERENCE) in @CubiCasa5k
 
+## USER PREFERENCES & WORKING STYLE
+
+### Permission-Based Workflow
+- **ALWAYS ask permission before modifying notebooks or applying changes** - User explicitly prefers to approve changes first
+- **Request permission before significant architectural or strategic changes** - User wants to be informed of major project modifications
+- **Step-by-step approach** - User prefers incremental changes with explanations rather than large automatic modifications
+- **No code dumps** - User doesn't want large code blocks shown in chat; prefer using edit tools directly
+
+### Technical Decision Making
+- **Performance over convenience** - User prioritizes training speed and efficiency, willing to make technical tradeoffs
+- **No quality compromises** - User explicitly rejected optimizations that would reduce model quality or accuracy
+- **Real data only** - Strongly emphasized using actual dataset, never dummy/synthetic data
+- **Evidence-based optimization** - User appreciates systematic testing and measurement of performance improvements
+
+### Communication Style
+- **Direct and impatient with slow processes** - User explicitly demanded faster solutions when training ETA was too long (13+ hours)
+- **Appreciates detailed technical explanations** - User engaged with deep technical details about CPU/GPU bottlenecks
+- **Values transparency** - User wants to understand what's happening and why (e.g., Windows multiprocessing issues)
+
+## TECHNICAL ENVIRONMENT
+
+### Hardware Constraints
+- **GPU**: RTX 2060 Super with 8GB VRAM (often shows as 16GB in Task Manager due to 8GB shared system RAM)
+- **OS**: Windows 10 (important for multiprocessing compatibility issues)
+- **RAM**: Sufficient for ML workloads but GPU memory is the limiting factor
+
+### Windows-Specific Issues Learned
+- **DataLoader num_workers**: Must use `num_workers=0` on Windows to avoid training hangs, or implement proper `if __name__ == '__main__':` protection for `num_workers>0`
+- **Multiprocessing**: Windows spawns processes instead of forking, causing worker conflicts in PyTorch
+- **Console**: PowerShell environment requires specific syntax awareness
+
+### Performance Optimization Knowledge
+- **CPU bottlenecks**: User's setup suffers from data loading bottlenecks causing 99% CPU usage during training
+- **GPU underutilization**: Initial training only used 0.4GB of 8GB VRAM, indicating room for optimization
+- **Augmentation strategy**: Moving augmentations from CPU (Albumentations) to GPU (Kornia) significantly improved load balancing
+- **Memory transfer**: `pin_memory=True` and `non_blocking=True` improve CPU→GPU transfer efficiency
+
+## PROJECT-SPECIFIC CONTEXT
+
+### FloorPlanAI Project Goals
+- **Final objective**: Extract room areas and labels from Dutch real estate floor plans (funda.nl)
+- **Business context**: Portfolio project demonstrating deep learning skills with practical application
+- **Technical approach**: Custom U-Net semantic segmentation + OCR pipeline, NOT using pre-built solutions
+
+### Dataset Context
+- **CubiCasa5K**: 4,200 training, 400 validation, 400 test samples
+- **Data format**: SVG-based annotations converted to semantic masks
+- **Classes**: Originally 8 classes, simplified to 3 classes (Background, Wall, Room) for initial training
+- **File structure**: Complex nested directory structure with train.txt/val.txt/test.txt splits
+
+### Model Architecture Decisions
+- **U-Net with ResNet34 encoder**: 24.4M parameters, proven architecture for semantic segmentation
+- **3-class simplification**: Strategic decision to start simple before scaling to full 8-class problem
+- **Training config**: batch_size=8, learning_rate=0.001, 20 epochs (optimized from slower initial config)
+
+### Training Pipeline Insights
+- **GPU augmentations**: Kornia preferred over Albumentations for better CPU/GPU load balancing
+- **Monitoring**: Granular progress tracking (every 10 batches) preferred for long training runs
+- **Checkpointing**: Best model saving based on validation loss, with periodic backups
+
+## DEBUGGING & TROUBLESHOOTING PATTERNS
+
+### Performance Investigation Methodology
+1. **Systematic testing**: User appreciates methodical approach to isolating bottlenecks
+2. **Hardware monitoring**: Task Manager, GPU memory usage, CPU utilization tracking
+3. **Controlled experiments**: Testing one variable at a time (e.g., augmentations on/off)
+4. **Evidence-based conclusions**: Measuring actual performance impacts before making decisions
+
+### Windows ML Development Gotchas
+- **DataLoader workers**: Always test with `num_workers=0` first on Windows
+- **GPU memory reporting**: Shared memory can make GPU memory appear larger than dedicated VRAM
+- **Process spawning**: Jupyter notebooks need proper main guard for multiprocessing
+- **Console differences**: PowerShell vs bash syntax considerations
+
+This context should help future AI assistants understand the user's working style, technical constraints, and project-specific knowledge to work more effectively.
+
+
+
