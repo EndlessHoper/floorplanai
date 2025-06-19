@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Always read [highlevelplan.md](mdc:planning_research/highlevelplan.md) and [dataset struc.md](mdc:planning_research/dataset struc.md) for context before doing anything. Then update [progress.md](mdc:planning_research/progress.md)
+
+Console is powershell. Always reference what step in progress we are at. 
+
+If something happens that requires us to deviate from plan, make note under the relevant step in progress.
