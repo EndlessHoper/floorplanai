@@ -19,7 +19,18 @@ Final use case will be to use this model and code pipeline to be able to get roo
 ---
 
 ## Detailed Plan (≈500 words)
-
+graph TD
+    subgraph "Our Custom Pipeline"
+        A["Floor Plan Image"] --> B{"Scale Calibration <br> (EasyOCR + CV2)"};
+        A --> C{"Our Trained U-Net Model"};
+        C --> D["Semantic Mask <br> (Wall, Room)"];
+        D -- "Select 'Room' Pixels" --> E{"Instance Separation <br> (Connected Components)"};
+        E --> F["Individual Room Masks"];
+        A --> G{"Text Label OCR <br> (EasyOCR for Dutch)"};
+        F & G --> H{"Associate Label to Mask <br> (Centroid Logic)"};
+        B & H --> I{"Calculate Area"};
+        I --> J["Output JSON"];
+    end
 ### 1. Dataset Preparation
 
 * **Structure:**
