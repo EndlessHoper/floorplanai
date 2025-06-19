@@ -7,5 +7,7 @@ Always read [highlevelplan.md](mdc:planning_research/highlevelplan.md) and [data
 
 Console is powershell. Always reference what step in progress we are at. 
 If something happens that requires us to deviate from plan, make note under the relevant step in progress.
-
 NEVER create dummy data only use the real data.
+
+You can read through the original repo (NOT MY REPO AND WE ARE MAKING OUR OWN MODEL BUT CAN BE USEFUL FOR REFERENCE) in @CubiCasa5k
+
